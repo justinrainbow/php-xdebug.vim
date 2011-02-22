@@ -104,19 +104,20 @@
 "=============================================================================
 " }}}
 
+" Do not source this script when python is not compiled in.
+if !has("python")
+    finish
+endif
+
 " Load debugger.py either from the runtime directory (usually
 " /usr/local/share/vim/vim71/plugin/ if you're running Vim 7.1) or from the
 " home vim directory (usually ~/.vim/plugin/).
-
-let s:scriptfile=expand("<sfile>")
-
 if filereadable($VIMRUNTIME."/plugin/debugger.py")
   pyfile $VIMRUNTIME/plugin/debugger.py
-elseif filereadable($VIM."/plugin/debugger.py")
-  pyfile $VIM/plugin/debugger.py
+elseif filereadable($HOME."/.vim/plugin/debugger.py")
+  pyfile $HOME/.vim/plugin/debugger.py
 else
-	execute "pyfile ".fnameescape(fnamemodify(s:scriptfile, ":h")."/debugger.py")
-  "call confirm('debugger.vim: Unable to find debugger.py. Place it in either your home vim directory or in the Vim runtime directory.', 'OK')
+  call confirm('debugger.vim: Unable to find debugger.py. Place it in either your home vim directory or in the Vim runtime directory.', 'OK')
 endif
 
 map <F1> :python debugger_resize()<cr>
